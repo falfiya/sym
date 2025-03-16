@@ -85,27 +85,30 @@
    Last Update: #datetime.today().display()
 ]
 
-== Defn. Relation
+== Relations
 
-A relation $R$ is defined as $R = (A,S)$ where $A$ is a tuple of attribute names and types and $S$ is the set of rows in the relation.
+A relation $R$ is defined as $R = (A,S)$ where $A$ is a tuple of attributes and $S$ is the set of rows in the relation.
 
 === Formally:
 
 $
 R =& (A,S) \
 A =& (nmany(C,max:"cols")) \
-S =& {(nmany(s,max:"cols")) | r in 1.."rows"} \
+C =& ("Name", "Type") \
+C_"name" =& C_1 "         " <- "Useful Notation" \
+C_"type" =& C_2 \
+S =& {(nmany(s_r,max:"cols")) | r in 1.."rows"} \
 $
 
-A $C$ is a column definition, and it has a name and a type (read: set).
+A $C$ is an attribute, or $C$olumn definition, and it has a name and a type (read: set).
 
-$
-C = ("Name", "Set")
-$
+In $R$, attribute names are distinct:
 
-The name and type can be accessed just like any other tuple, $C_1$ and $C_2$ respectively.
+$ forall i,j: i != j => A_(i "name") != A_(j "name") $
 
-Additionally, attribute names are distinct. That is to say: $forall i,j: i != j => A_(i 1) != A_(j 1)$.
+All values in $S$ must match their respective attribute type:
+
+$ forall i in 1..."cols", s in S : s_i in A_(i "type") $
 
 === Example:
 
@@ -126,6 +129,7 @@ $
 
 Since $S$ is a set, the order of $(1,2)$ and $(3,4)$ within make no difference.
 
+#pagebreak()
 
 == Set Theoretic Operations
 
@@ -138,8 +142,40 @@ There are a few set theoretic operations that can be applied to relations $R_1$ 
 - Difference or Subtraction $\\$ or $-$
 - Cross Product $times$
 
-Let's define them all for $R_1 = (H_1, S_1) #h(1em),#h(1em) R_2 = (H_2, S_2)$:
+#let A1 = col(red, $A_1$)
+#let S1 = col(rgb("ff44aa"), $S_1$)
+#let A2 = col(blue, $A_2$)
+#let S2 = col(rgb("33aaff"), $S_2$)
 
-Let $hexa = {union, inter, \\}$.
+Let's define them all for $R_1 = (A1, S1),#h(1em) R_2 = (A2, S2)$:
 
-$R$
+=== $union, inter, \\$
+
+Let $hexa = {union, inter, \\}$ be a set of binaray set operations.
+
+$R_1" "hexa" "R_2$ is defined iff $A1 = A2$.
+
+$ R_1" "hexa" "R_2 = (A_1, S1" "hexa" "S2) $
+
+=== Cross Product $times$
+
+The cross product works a little differently.
+
+$R_1 times R_2 $ is only defined if there are no attribute names in common:
+
+$ &exists R_1 times R_2 "iff" \
+&"      "forall col(#red, x) in A1:cancel(exists) col(#blue, y) in A2 st col(#red, x_"name") = col(#blue, y_"name")
+$
+
+If $R_1 times R_2$ exists, then we do something like a cartesian product, but we merge the tuples together. Instead of ${(#col(red, $(nmany(a))$), #col(blue, $(nmany(b))$))...}$ we output ${(#col(red, $nmany(a)$), #col(blue, $nmany(b)$))...}$.
+
+$ R_1 times R_2 = ((nmany(A1),nmany(A2,max: m))&&,\
+"New Set of Rows" ->"    "{(col(#rgb("ff44aa"), nmany(x)), col(#rgb("33aaff"), nmany(y))) |
+(col(#rgb("ff44aa"), x), col(#rgb("33aaff"), y)) in S1 times S2})
+$
+
+#pagebreak()
+
+== Functional Dependencies
+
+
