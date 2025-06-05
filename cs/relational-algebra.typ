@@ -176,6 +176,26 @@ $
 
 #pagebreak()
 
+== Relational Operations
+
+=== Joins $join$
+
+The natural join is written like so: $R_1 join R_2$. It is only defined when the shared attributes of each relation have the same type:
+
+$
+exists R_1 join R_2 "iff" forall col(#red, x) in A1, forall col(#blue, y) in A2, col(#red, x)_"name" = col(#blue, y)_"name" : col(#red, x)_"type" = col(#blue, y)_"type"
+$
+
+When it is defined, the natural join is the cartesian product of $R_1$ and $R_2$ filtered by rows where the shared attributes are equivalent.
+
+$ R_1 join R_2 = ((nmany(A1),nmany(A2,max: m))&&,\
+"New Set of Rows" ->"    "{(col(#rgb("ff44aa"), nmany(x)), col(#rgb("33aaff"), nmany(y))) |
+(col(#rgb("ff44aa"), x), col(#rgb("33aaff"), y)) in S1 times S2})
+$
+
 == Functional Dependencies
 
+#pagebreak()
+
+== Superkeys and Keys
 
