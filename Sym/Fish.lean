@@ -1,3 +1,5 @@
+import Mathlib
+
 inductive Fish | l | r
 instance : ToString Fish where
    toString
